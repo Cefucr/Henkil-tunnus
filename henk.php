@@ -29,70 +29,70 @@
 
 <?php
     if(isset($_POST['henkilo'])){
-        $lista = array('0','1','2','3','4','5','6','7','8','9','A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 
+        $aakkoset = array('0','1','2','3','4','5','6','7','8','9','A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 
         'L', 'M', 'N', 'P','R','S','T', 'U', 'V', 'W', 'X', 'Y');
 
         //Saa inputin viime sivun input kentältä
 
     
-        $moi =  $_POST["henkilo"];
-        $terve = $moi;
-        $hei = 0;
+        $henkilo =  $_POST["henkilo"];
+        $tunnus = $henkilo;
+        $vaara = 0;
         
         //katsoo jos input on 11 kirjainta
-        if(strlen($terve) == 11){   
+        if(strlen($tunnus) == 11){   
             
             //tarkistaa onko 1,2,3,4,5,6,8,9,10  merkit numeroita ja onko 7,11 merkit merkkejä
             
-            if(is_numeric($terve[0]) && is_numeric($terve[1]) && is_numeric($terve[2])
-            && is_numeric($terve[3]) && is_numeric($terve[4]) && is_numeric($terve[5])
-            && str_contains($terve[6], '-')||str_contains($terve[6], 'A')||str_contains($terve[6], '+')
-            && ctype_alpha($terve[10])
-            && is_numeric($terve[7]) && is_numeric($terve[8]) && is_numeric($terve[9])){
+            if(is_numeric($tunnus[0]) && is_numeric($tunnus[1]) && is_numeric($tunnus[2])
+            && is_numeric($tunnus[3]) && is_numeric($tunnus[4]) && is_numeric($tunnus[5])
+            && str_contains($tunnus[6], '-')||str_contains($tunnus[6], 'A')||str_contains($tunnus[6], '+')
+            && ctype_alpha($tunnus[10])
+            && is_numeric($tunnus[7]) && is_numeric($tunnus[8]) && is_numeric($tunnus[9])){
 
                 //katsoo jos päivämäärä voi olla oikea
-                if($terve[0].$terve[1] > 31 || $terve[0].$terve[1] < 1){
-                    $hei++;
+                if($tunnus[0].$tunnus[1] > 31 || $tunnus[0].$tunnus[1] < 1){
+                    $vaara++;
                 }
                 //katsoo jos kuukausi voi olla oikea
-                if($terve[2].$terve[3] > 12 || $terve[2].$terve[3] < 1){
-                    $hei++;
+                if($tunnus[2].$tunnus[3] > 12 || $tunnus[2].$tunnus[3] < 1){
+                    $vaara++;
                 }
                 //katsoo jos vuosi voi olla oikea
-                if($terve[4].$terve[5] > 99 || $terve[4].$terve[5] < 0){
-                    $hei++;
+                if($tunnus[4].$tunnus[5] > 99 || $tunnus[4].$tunnus[5] < 0){
+                    $vaara++;
                 }
                 
                 //katsoo jos 7 inputin kirjai on A , - tai +
-                if (!(str_contains($terve[6], '-')||str_contains($terve[6], 'A')||str_contains($terve[6], '+'))){
-                    $hei++;
+                if (!(str_contains($tunnus[6], '-')||str_contains($tunnus[6], 'A')||str_contains($tunnus[6], '+'))){
+                    $vaara++;
                 }
                 //katsoo jos 3 numeroinen numero on mahdollinen
-                $sum = $terve[7].$terve[8].$terve[9];
+                $sum = $tunnus[7].$tunnus[8].$tunnus[9];
                 if($sum < 001 || $sum > 999){
-                    $hei++;
+                    $vaara++;
                 }
                 
                 //katsoo jos 9 numeroisen luvun jakojäännöksen ja katsoo jos tarkistus kirjain on oikea
-                $yht = $terve[0].$terve[1].$terve[2].$terve[3].$terve[4].$terve[5].$terve[7].$terve[8].$terve[9];
+                $yht = $tunnus[0].$tunnus[1].$tunnus[2].$tunnus[3].$tunnus[4].$tunnus[5].$tunnus[7].$tunnus[8].$tunnus[9];
                 $ref = $yht % 31;
 
-                if($terve[10] != $lista[$ref]){
-                    $hei++;
+                if($tunnus[10] != $aakkoset[$ref]){
+                    $vaara++;
                 }
 
             }else{
-                $hei++;
+                $vaara++;
             }   
 
         }
         else{
-            $hei++;
+            $vaara++;
         }
 
         //kertoo jos id on oikea tai väärennetty
-        if($hei >= 1){
-            echo "Väärennetty ID id: ",$terve;
+        if($vaara >= 1){
+            echo "Väärennetty ID id: ",$tunnus;
         }
         else{
             echo "ID on tosi";
