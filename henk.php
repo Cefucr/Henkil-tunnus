@@ -4,102 +4,122 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Henkilotunnus</title>
+    <title>Henkilötunnus</title>
 </head>
-<body>
-    
+<body style="text-align:center;">
 <form action="" method="POST" class="mt-3">
     <div class="mb-3 row">
-        <label for="henkilo" class="col-sm-3 col-form-label">Henkilotunnus</label>
+        <label for="henkilo" class="col-sm-3 col-form-label">Henkilötunnus</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="inputhenkilo" name="henkilo">
-
             </div>
     </div>
     <div class="col-12">
-        <button class="btn btn-primary" type="submit">Tallenna</button>
+        <button class="btn btn-primary" type="submit">Lähetä</button>
     </div>
-
 </form>
-
-    
-    
 </body>
 </html>
 
 <?php
     if(isset($_POST['henkilo'])){
-        $aakkoset = array('0','1','2','3','4','5','6','7','8','9','A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 
+        $kirjaimetJaMerkit = array('0','1','2','3','4','5','6','7','8','9','A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 
         'L', 'M', 'N', 'P','R','S','T', 'U', 'V', 'W', 'X', 'Y');
-
-        //Saa inputin viime sivun input kentältä
-
     
-        $henkilo =  $_POST["henkilo"];
-        $tunnus = $henkilo;
-        $vaara = 0;
-        
+        $input = $_POST["henkilo"];
+        $onkoVaarin = false;
+        $errorMsg = [];
+     
         //katsoo jos input on 11 kirjainta
-        if(strlen($tunnus) == 11){   
-            
-            //tarkistaa onko 1,2,3,4,5,6,8,9,10  merkit numeroita ja onko 7,11 merkit merkkejä
-            
-            if(is_numeric($tunnus[0]) && is_numeric($tunnus[1]) && is_numeric($tunnus[2])
-            && is_numeric($tunnus[3]) && is_numeric($tunnus[4]) && is_numeric($tunnus[5])
-            && str_contains($tunnus[6], '-')||str_contains($tunnus[6], 'A')||str_contains($tunnus[6], '+')
-            && ctype_alpha($tunnus[10])
-            && is_numeric($tunnus[7]) && is_numeric($tunnus[8]) && is_numeric($tunnus[9])){
+        if(strlen($input) == 11){        
+
+            $paiva = $input[0].$input[1];
+            $kuukausi = $input[2].$input[3];
+            $vuosi = $input[4].$input[5];
+            $merkki = $input[6];
+            $luvut = $input[7].$input[8].$input[9];
+            $lopetusMerkki = $input[10];
+
+            if(is_numeric($paiva) == true && is_numeric($kuukausi) == true && is_numeric($vuosi) == true ){
+                
+                //katsoo jos vuosi voi olla oikea
+                if($vuosi > 99 || $vuosi < 0){
+                    $onkoVaarin = true;
+                    array_push($errorMsg, 'Tarkista Vuosi!');
+                }
+                
+                //katsoo jos kuukausi voi olla oikea
+                if($kuukausi > 12 || $kuukausi < 1 ){
+                    $onkoVaarin = true;
+                    array_push($errorMsg, 'Tarkista Kuukausi!');
+                }
+                
+                //kuinka monta pvm on kussakin kuukaudessa
+                if($kuukausi == 4
+                || $kuukausi == 6
+                || $kuukausi == 9
+                || $kuukausi == 11){
+                    $maxPvm = 30;
+                }else if($kuukausi == 2){
+
+                    //onko karkausvuosi
+                    if($vuosi % 4 != 0){
+                        $maxPvm = 28;
+                    }else{
+                        $maxPvm = 29;
+                    }
+                }else{
+                    $maxPvm = 31;
+                }
 
                 //katsoo jos päivämäärä voi olla oikea
-                if($tunnus[0].$tunnus[1] > 31 || $tunnus[0].$tunnus[1] < 1){
-                    $vaara++;
-                }
-                //katsoo jos kuukausi voi olla oikea
-                if($tunnus[2].$tunnus[3] > 12 || $tunnus[2].$tunnus[3] < 1){
-                    $vaara++;
-                }
-                //katsoo jos vuosi voi olla oikea
-                if($tunnus[4].$tunnus[5] > 99 || $tunnus[4].$tunnus[5] < 0){
-                    $vaara++;
+                if($paiva > $maxPvm){
+                    $onkoVaarin = true;
+                    array_push($errorMsg, 'Tarkista Pvm!');
                 }
                 
-                //katsoo jos 7 inputin kirjai on A , - tai +
-                if (!(str_contains($tunnus[6], '-')||str_contains($tunnus[6], 'A')||str_contains($tunnus[6], '+'))){
-                    $vaara++;
+                //katsoo jos 7 inputin kirjain on A , - tai +
+                if (!str_contains($merkki, '-') && !str_contains($merkki, 'A') && !str_contains($merkki, '+')){
+                    $onkoVaarin = true;
+                    array_push($errorMsg, 'Tarkista Merkki!');
                 }
+
                 //katsoo jos 3 numeroinen numero on mahdollinen
-                $sum = $tunnus[7].$tunnus[8].$tunnus[9];
-                if($sum < 001 || $sum > 999){
-                    $vaara++;
-                }
+                if(is_numeric($input[7]) == false 
+                || is_numeric($input[8]) == false 
+                || is_numeric($input[9]) == false){
+                    $onkoVaarin = true;
+                    array_push($errorMsg, 'Kohta 8,9,10 pitäisi olla numeroita!');
+                }else{
+                    if($luvut < 2 || $luvut > 899){
+                        $onkoVaarin = true;
+                        array_push($errorMsg, 'Tarkista kohta 8,9,10!');
+                    }
+
+                    //katsoo jos 9 numeroisen luvun jakojäännöksen ja katsoo jos tarkistus kirjain on oikea
+                    $yht = $input[0].$input[1].$input[2].$input[3].$input[4].$input[5].$input[7].$input[8].$input[9];
+                    $ref = $yht % 31;
                 
-                //katsoo jos 9 numeroisen luvun jakojäännöksen ja katsoo jos tarkistus kirjain on oikea
-                $yht = $tunnus[0].$tunnus[1].$tunnus[2].$tunnus[3].$tunnus[4].$tunnus[5].$tunnus[7].$tunnus[8].$tunnus[9];
-                $ref = $yht % 31;
-
-                if($tunnus[10] != $aakkoset[$ref]){
-                    $vaara++;
+                    if(!str_contains($lopetusMerkki,$kirjaimetJaMerkit[$ref])){
+                        $onkoVaarin = true;
+                        array_push($errorMsg, 'Tarkista lopetuskirjain!');
+                    }
                 }
-
             }else{
-                $vaara++;
-            }   
+                $onkoVaarin = true;
+                array_push($errorMsg, 'Kohdat 1-6 ja 8-10 pitää olla numeroita!');
+            }
+        }else{
+            $onkoVaarin = true;
+            array_push($errorMsg, 'Liian lyhyt!');
+        }
 
+        //kertoo jos tunnus on oikea tai väärennetty
+        if($onkoVaarin == true){
+            echo $errorMsg[0],"<br><br> Tunnus: ",$input;
         }
-        else{
-            $vaara++;
+        else if($onkoVaarin <= false){
+            echo "Tunnus on OK! :)";
         }
-
-        //kertoo jos id on oikea tai väärennetty
-        if($vaara >= 1){
-            echo "Väärennetty ID id: ",$tunnus;
-        }
-        else{
-            echo "ID on tosi";
-
-        }
-       
     }
-    
-//AarniLove    
 ?>
