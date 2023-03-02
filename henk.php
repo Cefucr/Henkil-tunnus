@@ -55,10 +55,7 @@
                 }
                 
                 //kuinka monta pvm on kussakin kuukaudessa
-                if($kuukausi == 4
-                || $kuukausi == 6
-                || $kuukausi == 9
-                || $kuukausi == 11){
+                if($kuukausi == 4 || $kuukausi == 6 || $kuukausi == 9 || $kuukausi == 11){
                     $maxPvm = 30;
                 }else if($kuukausi == 2){
 
@@ -88,6 +85,7 @@
                 if(is_numeric($input[7]) == false 
                 || is_numeric($input[8]) == false 
                 || is_numeric($input[9]) == false){
+                    
                     $onkoVaarin = true;
                     array_push($errorMsg, 'Kohta 8,9,10 pitäisi olla numeroita!');
                 }else{
