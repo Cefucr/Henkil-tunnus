@@ -78,13 +78,10 @@
 
         $luvut = rand(2,899);
 
-        if(strlen($luvut) == 1){
-            $luvut = "00".$luvut;
-        }else if(strlen($luvut) == 2){
+        while(strlen($luvut) < 3){
             $luvut = "0".$luvut;
         }
-        
-
+       
         //Määritellään loppumerkki
         $laske = [$paiva,$kuukausi,$vuosi,$luvut];
 
