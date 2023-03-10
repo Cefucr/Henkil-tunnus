@@ -43,7 +43,7 @@
         $vuosi = substr($vuosi, 2);
 
         //Valitaan random kuukausi, katsotaan onko karkausvuosi 
-        //ja jos kuukaudi on yksi lukuinen pistetään 0 eteen
+        //ja jos kuukausi on yksi lukuinen pistetään 0 eteen
 
         $kuukausi = rand(1,12);
 
@@ -74,7 +74,7 @@
             
 
         //Valitaan random luvut. 
-        //Jos on 1 tai 2 numeroinen pistetään nollia eteen että siitä tulee 3 lukuinen 
+        //Jos on 1 tai 2 numeroinen pistetään nollia eteen kunnes siitä tulee 3 lukuinen 
 
         $luvut = rand(2,899);
 
