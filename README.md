@@ -6,4 +6,4 @@
 ##### Jos kokeilet älä kokeile omalla henkilötunnuksella. Vaikka tämä ei tallenna tietojasi.
 ---
 ### Henkilötunnuksen luojalla voi luoda henkilötunnuksen.
-##### Jos haluat tarkistaaa onko luoja tehnyt oikean tunnunksen. Voit tarkistaa sen tarkistajalla.
+##### Jos haluat tarkistaa onko luoja tehnyt oikean tunnunksen. Voit tarkistaa sen tarkistajalla.
